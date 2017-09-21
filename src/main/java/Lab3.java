@@ -1,7 +1,7 @@
 import java.io.IOException;
     import java.net.URL;
     import java.util.Scanner;
-
+    import java.util.ArrayList;
     /**
      * Retrieve contents from a URL and return them as a string.
      *
@@ -26,40 +26,51 @@ public class Lab3 {
         return (65 <= letter && letter <= 90) || (97 <= letter && letter <= 122);
     }
 
-    public static int wordCount(final String content) {
-        int start = 0;
-        while (!isLetter(content.charAt(start)))
-            start += 1;
-        int count = 1;
-        for (int i = start; i < content.length() - 1; i++) {
-            if (!isLetter(content.charAt(i)) && isLetter(content.charAt(i + 1)))
-                count += 1;
+    public static ArrayList<String> wordArray(final String content) {
+        ArrayList<String> wordArray = new ArrayList<String>();
+        String temp = "";
+        for (int i = 0; i < content.length(); i++) {
+            if (isLetter(content.charAt(i))) {
+                temp += content.charAt(i);
+                if (i == content.length() - 1 || !isLetter(content.charAt(i + 1))) {
+                    wordArray.add(temp);
+                    temp = "";
+                }
+            }
         }
+        return wordArray;
+    }
+
+    public static int wordCount(final String content) {
+        return wordArray(content).size();
+    };
+
+    public static int oneWordCount(String content, final String word) {
+        int count = 0;
+        for (int i = 0; i < wordArray(content).size(); i++)
+            if (wordArray(content).get(i).equals(word))
+                count += 1;
         return count;
     }
 
-    /*public static int countOneWord(String content, final String word) {
-        int count = 0;
-        if (content.indexOf(word) == 0 && !isLetter(content.charAt(word.length()))) {
-            count += 1;
-            content = content.substring(word.length(), content.length());
+    public static int uniqueWordCount(final String content) {
+        ArrayList<String> temp = wordArray(content);
+        for (int i = 0; i < temp.size(); i++) {
+            for (int j = i + 1; j < temp.size(); j++) {
+                if (temp.get(i).equals(temp.get(j))) {
+                        temp.remove(j);
+                        j -= 1;
+                }
+            }
         }
-        while (content.indexOf(word) != -1 && !isLetter(content.charAt
-                (content.indexOf(word) - 1))) {
-            count += 1;
-            content = content.substring(content.indexOf(word) + word.length(),
-                    content.length());
-        }
-        return count;
-    }*/
+        return temp.size();
+    }
 
     public static void main(String[] args) {
-        //String content = urlToString("http://erdani.com/tdpl/hamlet.txt");
-        String content = "baibai bai bai    bai  bai  fsjlbaiailala bai bai bai ebi oao bai";
+        String content = urlToString("https://www.bls.gov/tus/charts/chart9.txt");
+        System.out.println(content);
         System.out.println(wordCount(content));
-        //System.out.println(countOneWord(content, "bai"));
-        //System.out.println(content.indexOf("bai"));
-
+        System.out.println(oneWordCount(content, "the"));
+        System.out.println(uniqueWordCount(content));
     }
-
 }
