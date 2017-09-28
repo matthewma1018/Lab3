@@ -45,7 +45,7 @@ public class Lab3 {
         return wordArray(content).size();
     }
 
-    public static int oneWordCount(String content, final String word) {
+    public static int oneWordCount(final String content, final String word) {
         int count = 0;
         for (int i = 0; i < wordArray(content).size(); i++)
             if (wordArray(content).get(i).equals(word))
